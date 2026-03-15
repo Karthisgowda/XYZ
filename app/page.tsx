@@ -13,6 +13,7 @@ type Job = {
   applicants: number
   tags: string[]
   posted: string
+  verified: boolean
 }
 
 const jobs: Job[] = [
@@ -27,6 +28,7 @@ const jobs: Job[] = [
     applicants: 241,
     tags: ['Immediate Start', 'Certificate', 'PPO'],
     posted: '1 day ago',
+    verified: true,
   },
   {
     id: 2,
@@ -39,6 +41,7 @@ const jobs: Job[] = [
     applicants: 189,
     tags: ['Portfolio Review', 'Flexible Hours'],
     posted: '3 days ago',
+    verified: true,
   },
   {
     id: 3,
@@ -51,6 +54,7 @@ const jobs: Job[] = [
     applicants: 122,
     tags: ['Mentorship', 'Pre-placement Interview'],
     posted: '5 days ago',
+    verified: false,
   },
 ]
 
@@ -66,13 +70,11 @@ export default function Home() {
     const term = search.trim().toLowerCase()
     if (!term) return jobs
 
-    return jobs.filter((job) => {
-      return (
-        job.title.toLowerCase().includes(term) ||
-        job.company.toLowerCase().includes(term) ||
-        job.tags.some((tag) => tag.toLowerCase().includes(term))
-      )
-    })
+    return jobs.filter((job) =>
+      job.title.toLowerCase().includes(term) ||
+      job.company.toLowerCase().includes(term) ||
+      job.tags.some((tag) => tag.toLowerCase().includes(term)),
+    )
   }, [search])
 
   const activeJob = filteredJobs.find((job) => job.id === activeJobId) ?? filteredJobs[0] ?? jobs[0]
@@ -94,21 +96,27 @@ export default function Home() {
 
   return (
     <div className={`layout-main ${isDarkMode ? 'theme-dark' : 'theme-light'}`}>
+      <div className="ambient-orb orb-one" />
+      <div className="ambient-orb orb-two" />
       <main className="layout-content">
-        <section className="hero-card fade-in-up">
+        <section className="hero-card fade-in-up glass-layer">
           <div>
             <p className="eyebrow">Internship Discovery Experience</p>
-            <h1>Find the right opportunity faster with a modern animated job board.</h1>
+            <h1>Attractive, animated internship board built for quick decisions.</h1>
             <p className="text-secondary">
-              Built with discoverability patterns inspired by top hiring platforms, including smart filtering,
-              quick-save, instant apply feedback, and recruiter trust signals.
+              Find roles with trust signals, animated interactions, and a cleaner journey from discovery to apply.
             </p>
+            <div className="hero-chip-row">
+              <span className="hero-chip pop-in">🔥 Trending Roles</span>
+              <span className="hero-chip pop-in">⚡ Fast Apply</span>
+              <span className="hero-chip pop-in">✅ Verified Recruiters</span>
+            </div>
           </div>
           <div className="hero-actions">
-            <button className="btn-primary" onClick={() => setIsDarkMode((prev) => !prev)}>
+            <button className="btn-primary btn-pop" onClick={() => setIsDarkMode((prev) => !prev)}>
               {isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             </button>
-            <button className="btn-action" onClick={handleApply}>Quick Apply to Highlighted Role</button>
+            <button className="btn-action btn-pop" onClick={handleApply}>Quick Apply to Highlighted Role</button>
           </div>
         </section>
 
@@ -144,7 +152,7 @@ export default function Home() {
             return (
               <article
                 key={job.id}
-                className={`card fade-in-up ${isActive ? 'active' : ''}`}
+                className={`card fade-in-up ${isActive ? 'active' : ''} glow-hover`}
                 style={{ animationDelay: `${0.15 + index * 0.08}s` }}
                 onClick={() => setActiveJobId(job.id)}
               >
@@ -160,7 +168,9 @@ export default function Home() {
                     {isSaved ? 'Saved' : 'Save'}
                   </button>
                 </div>
-                <p className="company-text">{job.company} • {job.location}</p>
+                <p className="company-text">
+                  {job.company} • {job.location} {job.verified ? '• ✅ Verified' : ''}
+                </p>
                 <div className="meta-row">
                   <span>{job.mode}</span>
                   <span>{job.duration}</span>
@@ -180,7 +190,7 @@ export default function Home() {
           })}
         </section>
 
-        <section className="card insights-panel fade-in-up">
+        <section className="card insights-panel fade-in-up glass-layer">
           <div>
             <h2>Live application activity</h2>
             <p className="text-secondary">See what helps candidates stand out and improve your selection strategy.</p>
@@ -205,7 +215,7 @@ export default function Home() {
       <aside className="layout-sidebar">
         <div className="sidebar-sticky">
           <h3>Selected Internship</h3>
-          <div className="card selected-preview">
+          <div className="card selected-preview glass-layer">
             <p className="text-label">{activeJob?.title ?? 'No role selected'}</p>
             <p className="text-secondary">{activeJob?.company}</p>
             <ul>
@@ -213,7 +223,7 @@ export default function Home() {
               <li>💼 {activeJob?.mode}</li>
               <li>💰 {activeJob?.stipend}</li>
             </ul>
-            <button className="btn-action" onClick={handleApply}>Apply Now</button>
+            <button className="btn-action btn-pop" onClick={handleApply}>Apply Now</button>
           </div>
 
           <div className="card progress-card">
