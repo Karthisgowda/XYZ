@@ -718,14 +718,33 @@ When prompted, select this directory and keep the default output settings for Ne
 
 ### pnpm note: approving build scripts (sharp)
 
-If you install dependencies with `pnpm` and see:
+This repo is now preconfigured to allow `sharp` build scripts via `package.json`:
 
-`Ignored build scripts: sharp@...`
+- `pnpm.onlyBuiltDependencies = ["sharp"]`
 
-run:
+So in most environments (including Vercel with pnpm), the `Ignored build scripts: sharp@...` issue is resolved automatically.
+
+If you still see the warning locally, run:
 
 ```bash
 pnpm approve-builds
 ```
 
-Then select `sharp` so image optimization dependencies can complete setup locally.
+Then select `sharp`.
+
+
+### Vercel deployment checklist (pnpm)
+
+1. Push your code to GitHub.
+2. In Vercel, import this repository.
+3. In **Project Settings → General**, set **Install Command** to:
+   - `pnpm install --frozen-lockfile`
+4. Set **Build Command** to:
+   - `pnpm build`
+5. Add required environment variables:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+6. Deploy.
+
+If a previous failed build was cached, click **Redeploy** with **Use existing Build Cache = off** once.
