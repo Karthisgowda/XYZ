@@ -692,3 +692,26 @@ If you are new to the repository, start with:
 ## License
 
 MIT
+
+## Deploy on Vercel
+
+1. Push this repository to GitHub.
+2. In Vercel, click **Add New → Project** and import the GitHub repository.
+3. Keep the framework preset as **Next.js**.
+4. Add environment variables in Vercel Project Settings:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+5. Click **Deploy**.
+6. After deployment, open the generated URL and verify the homepage and auth flows.
+
+### Optional: Deploy from CLI
+
+```bash
+npm i -g vercel
+vercel login
+vercel
+vercel --prod
+```
+
+When prompted, select this directory and keep the default output settings for Next.js.
